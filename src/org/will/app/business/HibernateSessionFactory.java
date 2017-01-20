@@ -15,7 +15,7 @@ public class HibernateSessionFactory
 	SessionFactory sf = null;
 	
 	//session不是线程安全的，所以这里可以用ThreadLocal机制来进行多线程处理
-	public final ThreadLocal<Session> session = new ThreadLocal<Session>();
+	public final ThreadLocal<Session> session = new  ThreadLocal<Session>();
 	
 	
 	public static HibernateSessionFactory getInstance()
