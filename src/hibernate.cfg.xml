@@ -30,5 +30,7 @@
 		<mapping class="org.will.app.domain.News" />	
 		<mapping class="org.will.app.domain.Person" />	
 		<mapping class="org.will.app.domain.Address" />	
+		<mapping class="org.will.app.domain.Car" />	
+		<mapping class="org.will.app.domain.Phone" />	
 	</session-factory>
 </hibernate-configuration>	

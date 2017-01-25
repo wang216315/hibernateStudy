@@ -44,14 +44,36 @@ public class Person
 	//N-1 有关系表关联关系
 	@ManyToOne(targetEntity=News.class)
 	@JoinTable(name="person_news",
-	//指定person表的person_id字段的外键是关系表的person_id字段，因为是N-1，所以不重复。
+	//指定person表的person_id字段的外键是关系表的person_id字段，因为是单向N-1，所以不重复，
+	//如果是单向N-N，去掉unique=true即可。
 	//制定news表id字段的外键是关系表的news_id字段。
 	joinColumns=@JoinColumn(name="person_id",referencedColumnName="person_id",unique=true),	
 	inverseJoinColumns=@JoinColumn(name="news_id",referencedColumnName="id"))
 	@Cascade(CascadeType.ALL)
 	private News news;
 	
-
+	//工作地址
+	//单向1-N无关联表
+	@OneToMany(targetEntity=Address.class)
+	@JoinColumn(name="person_id",referencedColumnName="person_id")
+	@Cascade(CascadeType.ALL)
+	private Set<Address> workAddress = new HashSet<>();
+	
+	//汽车
+	//双向1-N无关联表关联
+	@OneToMany(targetEntity=Car.class,mappedBy="person")
+	@Cascade(CascadeType.ALL)
+	private Set<Car> cars = new HashSet<Car>();
+	
+	//双向N-N有关联表关联
+	@ManyToMany(targetEntity=Phone.class)
+	@JoinTable(name="person_phone",
+	joinColumns=@JoinColumn(name="person_id",referencedColumnName="person_id"),
+	inverseJoinColumns=@JoinColumn(name="phone_id",referencedColumnName="phone_id"))	
+	@Cascade(CascadeType.ALL)
+	private Set<Phone> workPhones = new HashSet<Phone>();
+	 
+	
 	public Integer getId()
 	{
 		return id;
@@ -113,6 +135,30 @@ public class Person
 
 	public void setNews(News news) {
 		this.news = news;
+	}
+
+	public Set<Address> getWorkAddress() {
+		return workAddress;
+	}
+
+	public void setWorkAddress(Set<Address> workAddress) {
+		this.workAddress = workAddress;
+	}
+
+	public Set<Car> getCars() {
+		return cars;
+	}
+
+	public void setCars(Set<Car> cars) {
+		this.cars = cars;
+	}
+
+	public Set<Phone> getWorkPhones() {
+		return workPhones;
+	}
+
+	public void setWorkPhones(Set<Phone> workPhones) {
+		this.workPhones = workPhones;
 	}
 	
 }

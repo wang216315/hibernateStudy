@@ -56,11 +56,8 @@ public class HibernateSessionFactory
 		{
 			s.close();
 			session.set(null);
-		}
-		
-		
-	}
-	
+		}		
+	}	
 	
     /*
      * 拿到 Hibernate SessionFactroy DB操作对象
@@ -71,10 +68,9 @@ public class HibernateSessionFactory
 				new StandardServiceRegistryBuilder().configure().build();
 		Metadata metadata = new MetadataSources(standardRegistry).getMetadataBuilder()
 				.applyImplicitNamingStrategy(ImplicitNamingStrategyComponentPathImpl.INSTANCE)
-				.build();
-		
+				.build();	
 		return metadata.getSessionFactoryBuilder().build();
 	}
 	
-	
-}
+}	
+

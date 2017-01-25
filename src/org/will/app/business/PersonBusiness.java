@@ -5,13 +5,21 @@ import java.util.Scanner;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.will.app.domain.Address;
+import org.will.app.domain.Car;
 import org.will.app.domain.Name;
 import org.will.app.domain.News;
 import org.will.app.domain.Person;
+import org.will.app.domain.Phone;
 
 public class PersonBusiness
 {
 	private Scanner sc;
+	Session session;
+	
+	public PersonBusiness()
+	{
+		session = HibernateSessionFactory.getInstance().getCurrentSession();
+	}
 
 	public void menu()
 	{
@@ -20,7 +28,8 @@ public class PersonBusiness
 	
 	private void insertPerson()
 	{
-		Session session = HibernateSessionFactory.getInstance().getCurrentSession();
+		
+		
 		Transaction tx = session.beginTransaction();
 		Person person = new Person();
 		Name name = new Name();
@@ -61,6 +70,10 @@ public class PersonBusiness
 			news.setContent(title);
 			person.setNews(news);
 			
+			processWorkAddress(person);
+			processCar(person);
+			processWorkPhone(person,session);
+			
 			
 			//如果person对象所关联的对象news对象，在注解总没有设置 cascade=cascadeType.ALL的话，news需要在person保存后再写代码保存。
 			//因为hibernate框架就不会自动级联保存了。
@@ -76,13 +89,64 @@ public class PersonBusiness
 			System.out.print("保存成功！按1继续输入，按任意键退出。");
 		}
 		while(sc.nextLine().equals("1"));
+
+	
+	}
+	
+	private void processCar(Person person)
+	{		
+		do
+		{
+			System.out.println("请输入汽车信息(品牌,系列,型号):");
+			String res = sc.nextLine();
+			String[] results = res.split(",");
+			Car car = new Car();			
+			car.setCarBrand(results[0]);
+			car.setCarSeries(results[1]);
+			car.setCarModel(results[2]);
+			person.getCars().add(car);
+			car.setPerson(person);
+			System.out.print("再次输入请按1,按任意键结束汽车信息输入。");			
+		}
+		while(sc.nextLine().equals("1"));
+		
+		
+	}
+
+	
+	private void processWorkPhone(Person person,Session session)
+	{
+		System.out.println("请输入工作电话，多个电话以逗号分隔：");
+		String res = sc.nextLine();
+		String[] phones = res.split(",");
+		for (String a : phones)
+		{
+			Phone phone = new Phone();
+			phone.setPhoneMode("座机");
+			phone.setPhoneNumber(a);		
+			person.getWorkPhones().add(phone);				
+		}
+	}
+	
+	private void processWorkAddress(Person person)
+	{
+		System.out.println("请输入工作地址，多个地址以逗号分隔：");
+		String res = sc.nextLine();
+		String addresses[] = res.split(",");
+		for (String a : addresses)
+		{
+			Address address = new Address(a);
+			person.getWorkAddress().add(address);
+		}
+		
 	}
 	
 	private void processScore(String target,Person person)
 	{
 		String[] ab = target.split("\\|");
 		
-		for (String t : ab) {
+		for (String t : ab)
+		{
 			int i = t.length();
 			t = t.substring(1, i-1);
 			String[] t1 = t.split(",");
@@ -91,3 +155,4 @@ public class PersonBusiness
 	}
 	
 }
+;

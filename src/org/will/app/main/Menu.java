@@ -11,6 +11,7 @@ public class Menu
 
 	public void showMenu()
 	{
+		
 		System.out.println("请选择你要的输入的类型：\n"+"1.新闻 2.个人,按q退出程序。");
 		sc = new Scanner(System.in);
 		String choice = sc.nextLine();
